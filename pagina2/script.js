@@ -1,0 +1,1 @@
+setTimeout(function() { alert("Toque no lojeiro para realizar vossa aquisição"); }, 100);
