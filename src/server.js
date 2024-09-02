@@ -26,9 +26,9 @@ app.post('/api/produto', (req, res) => {
     const sql = 'INSERT INTO produtos (nome, preco, descricao) VALUES (?, ?, ?)';
     db.query(sql, [nome, preco, descricao], (err, results) => {
         if (err) {
-            res.json({ sucesso: false, message: 'Erro ao adicionar produto', erro: err});
+            res.status(400).json({ sucesso: false, message: 'Erro ao adicionar produto', erro: err});
         } else {
-            res.json({ sucesso: true, message: 'Produto adicionado com sucesso', data:results });
+            res.status(200).json({ sucesso: true, message: 'Produto adicionado com sucesso', data:results });
         }
     });
 });
@@ -38,11 +38,11 @@ app.put('/api/produto/:id', (req, res) => {
     const { id } = req.params;
     const { nome, preco, descricao } = req.body;
     const sql = 'UPDATE produtos SET nome = ?, preco = ?, descricao = ? WHERE id = ?';
-    db.query(sql, [nome, preco, descricao, id], (err, result) => {
+    db.query(sql, [nome, preco, descricao, id], (err, results) => {
         if (err) {
-            res.json({ message: 'Erro ao editar produto', err });
+            res.status(400).json({ sucesso: false, message: 'Erro ao editar produto', erro: err });
         } else {
-            res.json({ message: 'Produto editado com sucesso' });
+            res.status(200).json({ sucesso: true, message: 'Produto editado com sucesso', data:results });
         }
     });
 });
@@ -76,7 +76,7 @@ app.post('/api/usuarios/login', (req, res) => {
     const { email, senha } = req.body;
     db.query('SELECT * FROM Usuarios WHERE email = ? AND senha = ?', [email, senha], (err, results) => {
         if (err) {
-            res.status(401).json({sucesso: false, message: 'Erro ao realizar login', error: err });
+            res.status(401).json({sucesso: false, message: 'Erro ao realizar login', erro: err });
         } else {
             if (results.length > 0) {
                 res.status(200).json({ sucesso: true, message: 'Login realizado com sucesso!', user: results[0] });
@@ -92,7 +92,7 @@ app.post('/api/carrinho', (req, res) => {
     const { usuario_id, produto_id, quantidade } = req.body;
     db.query('INSERT INTO Carrinho (usuario_id, produto_id, quantidade) VALUES (?, ?, ?)', [usuario_id, produto_id, quantidade], (err, results) => {
         if (err) {
-            res.status(400).json({sucesso: false, message: 'Erro ao tentar adicionar produto', error: err });
+            res.status(400).json({sucesso: false, message: 'Erro ao tentar adicionar produto', erro: err });
         } else {
             res.status(200).json({sucesso: true, message: 'Produto adicionado ao carrinho com sucesso!', data:results });
         }
@@ -103,10 +103,9 @@ app.get('/api/carrinho/:usuario_id', (req, res) => {
     const { usuario_id } = req.params;
     db.query('SELECT c.*, p.nome, p.preco FROM Carrinho c JOIN Produtos p ON c.produto_id = p.id WHERE c.usuario_id = ?', [usuario_id], (err, results) => {
         if (err) {
-            res.status(400).json({ error: err });
-            return;
+            res.status(400).json({sucesso: false, message: 'Erro ao tentar mostrar carrinho', erro: err });
         } else {
-            res.json(results);
+            res.status(200).json({sucesso: true, message: 'Carrinho atualizado com sucesso!', data:results });
         }
     });
 });
@@ -115,9 +114,9 @@ app.delete('/api/carrinho/:usuario_id/:produto_id', (req, res) => {
     const { usuario_id, produto_id } = req.params;
     db.query('DELETE FROM Carrinho WHERE usuario_id = ? AND produto_id = ?', [usuario_id, produto_id], (err, results) => {
         if (err) {
-            res.json({ error: err });
+            res.status(400).json({sucesso: false, message: 'Erro ao tentar remover produto do carrinho', erro: err });
         } else {
-            res.json({ message: 'Item removido do carrinho com sucesso!' });
+            res.status(200).json({sucesso: true, message: 'Produto removido com sucesso!', data:results });
         }
     });
 });

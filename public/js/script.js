@@ -20,6 +20,7 @@ async function cadastrarUsuario(event) {
         const result = await response.json();
         if (result.sucesso) {
             alert(result.message);
+            window.location.href = '../';
         } else {
             alert(result.message + ":" + result.erro);
         }
@@ -104,7 +105,7 @@ async function buscarProdutos() {
                     <td>R$ ${produto.preco}</td>
                     <td>${produto.descricao}</td>
                     <td>
-                        <a class="btn btn-warning btn-sm">Editar</a>
+                        <a class="btn btn-warning btn-sm" onclick="editarProduto(${produto.id})">Editar</a>
                         <a class="btn btn-danger btn-sm" onclick="removerProduto(${produto.id})">Remover</a>
                     </td>
                 `;
@@ -119,31 +120,31 @@ async function buscarProdutos() {
     }
 }
 
-// async function editarProduto(id) {
-    
-//     const nome = document.getElementById('nome').value;
-//     const preco = document.getElementById('preco').value;
-//     const descricao = document.getElementById('descricao').value;
+async function editarProduto(id, nome, preco, descricao) {
+    const nomeEditado = prompt("Nome:", nome);
+    const precoEditado = parseFloat(prompt("Preço:", preco));
+    const descricaoEditada = prompt("Descrição:", descricao);
 
-//     try {
-//         const response = await fetch(`${apiUrl}/produto`, {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json'
-//             },
-//             body: JSON.stringify({ nome, preco, descricao })
-//         });
+    try {
+        const response = await fetch(`${apiUrl}/produto/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ nome: nomeEditado, preco: precoEditado, descricao: descricaoEditada })
+        });
 
-//         const result = await response.json();
-//         if (result.sucesso) {
-//             alert(result.message);
-//         } else {
-//             alert(result.message + ":" + result.erro);
-//         }
-//     } catch (error) {
-//         alert('Ocorreu um erro ao tentar realizar a edição.');
-//     }
-// };
+        const result = await response.json();
+
+        if (result.sucesso) {
+            buscarProdutos(); // Recarregar a lista de produtos após edição
+        } else {
+            console.error('Erro ao editar produto: ', result.message);
+        }
+    } catch (error) {
+        console.error('Erro ao editar produto:', error);
+    }
+}
 
 async function removerProduto(id) {
     if (confirm('Tem certeza que deseja remover este produto?')) {
