@@ -64,7 +64,7 @@ async function adicionarAoCarrinho(produtoId) {
 }
 
 async function removerDoCarrinho(itemId) {
-    const response = await fetch(`${apiUrl}/carrinho/remover/${itemId}`, {
+    const response = await fetch(`${apiUrl}/carrinho/${itemId}`, {
         method: 'DELETE'
     });
 

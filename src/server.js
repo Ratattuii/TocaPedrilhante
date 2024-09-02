@@ -88,13 +88,13 @@ app.post('/api/usuarios/login', (req, res) => {
 });
 
 // Endpoints do carrinho
-app.post('/api/carrinho/adicionar', (req, res) => {
+app.post('/api/carrinho', (req, res) => {
     const { usuario_id, produto_id, quantidade } = req.body;
     db.query('INSERT INTO Carrinho (usuario_id, produto_id, quantidade) VALUES (?, ?, ?)', [usuario_id, produto_id, quantidade], (err, results) => {
         if (err) {
-            res.status(400).json({ error: err });
+            res.status(400).json({sucesso: false, message: 'Erro ao tentar adicionar produto', error: err });
         } else {
-            res.json({ message: 'Item adicionado ao carrinho com sucesso!' });
+            res.status(200).json({sucesso: true, message: 'Produto adicionado ao carrinho com sucesso!', data:results });
         }
     });
 });

@@ -164,3 +164,109 @@ async function removerProduto(id) {
         }
     }
 };
+
+async function carregarProdutosCatalogo() {
+
+    try {
+        const response = await fetch(`${apiUrl}/produtos`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const result = await response.json();
+        if (result.sucesso) {
+            const produtos = result.data;
+            const tabela = document.getElementById('produtos-catalogo');
+            tabela.innerHTML = '';
+
+            produtos.forEach(produto => {
+                const card = document.createElement('div');
+                card.className = 'col-md-6 mb-3';
+        
+                card.innerHTML = `
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">${produto.nome}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">R$ ${produto.preco}</h6>
+                            <p class="card-text">${produto.descricao}</p>
+                            <button class="btn btn-primary" onclick="adicionarAoCarrinho(${produto.id})">Adicionar ao Carrinho</button>
+                        </div>
+                    </div>
+                `;
+                tabela.appendChild(card);
+            });
+        } else {
+            alert(result.message + ":" + result.erro);
+        }
+    } catch (error) {
+        alert('Ocorreu um erro ao tentar listar produtos.');
+    }
+}
+
+async function adicionarAoCarrinho(produto_id) {
+    try {
+        const response = await fetch('/api/carrinho', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ usuario_id, produto_id, quantidade })
+        });
+
+        const result = await response.json();
+        if (result.sucesso) {
+            alert(result.message);
+        } else {
+            alert(result.message + ":" + result.erro);
+            atualizarCarrinho();
+        }
+    } catch (error) {
+        alert('Ocorreu um erro ao tentar adicionar o produto ao carrinho.');
+    }
+}
+
+async function atualizarCarrinho() {
+    try {
+
+        const response = await fetch(`/api/carrinho/${usuario_id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const carrinho = await response.json();
+        if (carrinho.error) {
+            alert('Erro ao carregar o carrinho: ' + carrinho.error);
+        } else {
+            const carrinho = document.getElementById('cart-list');
+            const precoCarrinho = document.getElementById('total-price');
+            let total = 0;
+
+            carrinho.innerHTML = '';
+            carrinho.forEach(item => {
+                total += item.preco * item.quantidade;
+
+                const listarProduto = document.createElement('li');
+                listarProduto.className = 'list-group-item d-flex justify-content-between align-items-center';
+
+                listarProduto.innerHTML = `
+                    <div>
+                        <h6>${item.nome} (x${item.quantidade})</h6>
+                        <small>R$ ${(item.preco * item.quantidade)}</small>
+                    </div>
+                    <button class="btn btn-danger btn-sm" onclick="removerDoCarrinho(${item.produto_id})">Remover</button>
+                `;
+
+                cartList.appendChild(listItem);
+            });
+
+            precoCarrinho.innerText = totalPrice;
+        }
+    } catch (error) {
+        alert('Ocorreu um erro ao tentar atualizar o carrinho.');
+    }
+}
+
