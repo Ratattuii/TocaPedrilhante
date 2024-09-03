@@ -105,7 +105,7 @@ async function buscarProdutos() {
                     <td>R$ ${produto.preco}</td>
                     <td>${produto.descricao}</td>
                     <td>
-                        <a class="btn btn-warning btn-sm" onclick="editarProduto(${produto.id})">Editar</a>
+                        <a href="./editar.html" class="btn btn-warning btn-sm">Editar</a>
                         <a class="btn btn-danger btn-sm" onclick="removerProduto(${produto.id})">Remover</a>
                     </td>
                 `;
@@ -120,10 +120,10 @@ async function buscarProdutos() {
     }
 }
 
-async function editarProduto(id, nome, preco, descricao) {
-    const nomeEditado = prompt("Nome:", nome);
-    const precoEditado = parseFloat(prompt("Preço:", preco));
-    const descricaoEditada = prompt("Descrição:", descricao);
+async function editarProduto(id) {
+    const nomeNovo = document.getElementById('nomeNovo');
+    const precoNovo = document.getElementById('precoNovo');
+    const descricaoNova = document.getElementById('descricaoNova');
 
     try {
         const response = await fetch(`${apiUrl}/produto/${id}`, {
@@ -131,10 +131,11 @@ async function editarProduto(id, nome, preco, descricao) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ nome: nomeEditado, preco: precoEditado, descricao: descricaoEditada })
+            body: JSON.stringify({ nome: nomeNovo.value, preco: precoNovo.value, descricao: descricaoNova.value})
         });
 
         const result = await response.json();
+        console.log(result);
 
         if (result.sucesso) {
             buscarProdutos(); // Recarregar a lista de produtos após edição

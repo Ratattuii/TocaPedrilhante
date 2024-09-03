@@ -10,8 +10,8 @@ app.use(express.static('public'));
 
 // Rota para buscar todos os produtos
 app.get('/api/produtos', (req, res) => {
-    const sql = 'SELECT * FROM produtos';
-    db.query(sql, (err, results) => {
+    const query = 'SELECT * FROM produtos';
+    db.query(query, (err, results) => {
         if (err) {
             res.json({sucesso: false, message: 'Erro ao listar produtos', erro: err });
         } else {
@@ -23,8 +23,8 @@ app.get('/api/produtos', (req, res) => {
 // Rota para adicionar um novo produto
 app.post('/api/produto', (req, res) => {
     const { nome, preco, descricao } = req.body;
-    const sql = 'INSERT INTO produtos (nome, preco, descricao) VALUES (?, ?, ?)';
-    db.query(sql, [nome, preco, descricao], (err, results) => {
+    const query = 'INSERT INTO produtos (nome, preco, descricao) VALUES (?, ?, ?)';
+    db.query(query, [nome, preco, descricao], (err, results) => {
         if (err) {
             res.status(400).json({ sucesso: false, message: 'Erro ao adicionar produto', erro: err});
         } else {
@@ -37,8 +37,8 @@ app.post('/api/produto', (req, res) => {
 app.put('/api/produto/:id', (req, res) => {
     const { id } = req.params;
     const { nome, preco, descricao } = req.body;
-    const sql = 'UPDATE produtos SET nome = ?, preco = ?, descricao = ? WHERE id = ?';
-    db.query(sql, [nome, preco, descricao, id], (err, results) => {
+    const query = 'UPDATE produtos SET nome = ?, preco = ?, descricao = ? WHERE id = ?';
+    db.query(query, [nome, preco, descricao, id], (err, results) => {
         if (err) {
             res.status(400).json({ sucesso: false, message: 'Erro ao editar produto', erro: err });
         } else {
@@ -50,8 +50,8 @@ app.put('/api/produto/:id', (req, res) => {
 // Rota para remover um produto
 app.delete('/api/produto/:id', (req, res) => {
     const { id } = req.params;
-    const sql = 'DELETE FROM produtos WHERE id = ?';
-    db.query(sql, [id], (err, results) => {
+    const query = 'DELETE FROM produtos WHERE id = ?';
+    db.query(query, [id], (err, results) => {
         if (err) {
             res.status(400).json({ sucesso: false, message: 'Erro ao remover o produto', erro: err });
         } else {
