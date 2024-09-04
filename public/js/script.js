@@ -1,6 +1,6 @@
 const apiUrl = 'http://localhost:3000/api';
 
-// ------------------------------------------
+// ----------------------------------------------------------------------------
 
 async function cadastrarUsuario(event) {
     event.preventDefault();
@@ -29,7 +29,7 @@ async function cadastrarUsuario(event) {
     }
 };
 
-// ----------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 async function realizarLogin(event) {
     event.preventDefault();
@@ -82,6 +82,8 @@ async function cadastrarProduto(event) {
     }
 };
 
+// ----------------------------------------------------------------------------
+
 async function buscarProdutos() {
     try {
         const response = await fetch(`${apiUrl}/produtos`, {
@@ -105,7 +107,7 @@ async function buscarProdutos() {
                     <td>R$ ${produto.preco}</td>
                     <td>${produto.descricao}</td>
                     <td>
-                        <a href="./editar.html" class="btn btn-warning btn-sm">Editar</a>
+                        <a href="./editar.html?id=${produto.id}" class="btn btn-warning btn-sm">Editar</a>
                         <a class="btn btn-danger btn-sm" onclick="removerProduto(${produto.id})">Remover</a>
                     </td>
                 `;
@@ -120,32 +122,42 @@ async function buscarProdutos() {
     }
 }
 
-async function editarProduto(id) {
-    const nomeNovo = document.getElementById('nomeNovo');
-    const precoNovo = document.getElementById('precoNovo');
-    const descricaoNova = document.getElementById('descricaoNova');
+// ----------------------------------------------------------------------------
+
+function getProdutoIdFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('id');
+}
+
+async function editarProduto() {
+    const produtoId = getProdutoIdFromURL();
+    const nome = document.getElementById('nomeNovo').value;
+    const preco = document.getElementById('precoNovo').value;
+    const descricao = document.getElementById('descricaoNova').value;
 
     try {
-        const response = await fetch(`${apiUrl}/produto/${id}`, {
+        const response = await fetch(`${apiUrl}/produto/${produtoId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ nome: nomeNovo.value, preco: precoNovo.value, descricao: descricaoNova.value})
+            body: JSON.stringify({ nome, preco, descricao })
         });
 
         const result = await response.json();
-        console.log(result);
-
         if (result.sucesso) {
-            buscarProdutos(); // Recarregar a lista de produtos após edição
+            alert('Produto atualizado com sucesso!');
+            window.location.href = './index.html';
         } else {
-            console.error('Erro ao editar produto: ', result.message);
+            alert('Erro ao editar produto: ' + result.message);
         }
     } catch (error) {
-        console.error('Erro ao editar produto:', error);
+        alert('Erro ao editar produto.');
     }
 }
+
+
+// ----------------------------------------------------------------------------
 
 async function removerProduto(id) {
     if (confirm('Tem certeza que deseja remover este produto?')) {
@@ -166,6 +178,8 @@ async function removerProduto(id) {
         }
     }
 };
+
+// ----------------------------------------------------------------------------
 
 async function carregarProdutosCatalogo() {
 
@@ -207,9 +221,11 @@ async function carregarProdutosCatalogo() {
     }
 }
 
+// ----------------------------------------------------------------------------
+
 async function adicionarAoCarrinho(produto_id) {
     try {
-        const response = await fetch('/api/carrinho', {
+        const response = await fetch(`${apiUrl}/carrinho`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -217,7 +233,7 @@ async function adicionarAoCarrinho(produto_id) {
             body: JSON.stringify({ usuario_id, produto_id, quantidade })
         });
 
-        const result = await response.json();
+        const result = await response.json(); 
         if (result.sucesso) {
             alert(result.message);
         } else {
@@ -229,10 +245,12 @@ async function adicionarAoCarrinho(produto_id) {
     }
 }
 
+// ----------------------------------------------------------------------------
+
 async function atualizarCarrinho() {
     try {
 
-        const response = await fetch(`/api/carrinho/${usuario_id}`, {
+        const response = await fetch(`${apiUrl}/carrinho/${usuario_id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -243,8 +261,8 @@ async function atualizarCarrinho() {
         if (carrinho.error) {
             alert('Erro ao carregar o carrinho: ' + carrinho.error);
         } else {
-            const carrinho = document.getElementById('cart-list');
-            const precoCarrinho = document.getElementById('total-price');
+            const carrinho = document.getElementById('carrinho');
+            const precoCarrinho = document.getElementById('precoCarrinho');
             let total = 0;
 
             carrinho.innerHTML = '';
