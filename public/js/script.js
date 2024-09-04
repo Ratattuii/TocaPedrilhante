@@ -1,5 +1,10 @@
 const apiUrl = 'http://localhost:3000/api';
 
+function getIdFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('id');
+}
+
 // ----------------------------------------------------------------------------
 
 async function cadastrarUsuario(event) {
@@ -47,7 +52,7 @@ const response = await fetch(`${apiUrl}/usuarios/login`, {
     const result = await response.json();
     if (result.sucesso) {
         alert(result.message);
-        window.location.href = './menu';
+        window.location.href = './menu/index.html?id=${result.usuario.id}';
     } else {
         alert(result.message);
     }
@@ -124,13 +129,9 @@ async function buscarProdutos() {
 
 // ----------------------------------------------------------------------------
 
-function getProdutoIdFromURL() {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('id');
-}
 
 async function editarProduto() {
-    const produtoId = getProdutoIdFromURL();
+    const produtoId = getIdFromURL();
     const nome = document.getElementById('nomeNovo').value;
     const preco = document.getElementById('precoNovo').value;
     const descricao = document.getElementById('descricaoNova').value;
@@ -224,24 +225,25 @@ async function carregarProdutosCatalogo() {
 // ----------------------------------------------------------------------------
 
 async function adicionarAoCarrinho(produto_id) {
+    const usuario_id = getIdFromURL();
+
     try {
         const response = await fetch(`${apiUrl}/carrinho`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ usuario_id, produto_id, quantidade })
+            body: JSON.stringify({ usuario_id: usuario_id, produto_id, quantidade: 1})
         });
 
-        const result = await response.json(); 
+        const result = await response.json();
         if (result.sucesso) {
             alert(result.message);
         } else {
-            alert(result.message + ":" + result.erro);
-            atualizarCarrinho();
+            alert('Erro ao adicionar ao carrinho: ' + result.message);
         }
-    } catch (error) {
-        alert('Ocorreu um erro ao tentar adicionar o produto ao carrinho.');
+    } catch (erro) {
+        alert('Ocorreu um erro ao tentar adicionar o produto ao carrinho.' + erro);
     }
 }
 
