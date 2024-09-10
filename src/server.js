@@ -23,6 +23,7 @@ app.get('/api/produtos', (req, res) => {
 // Rota para adicionar um novo produto
 app.post('/api/produto', (req, res) => {
     const { nome, preco, descricao } = req.body;
+
     const query = 'INSERT INTO produtos (nome, preco, descricao) VALUES (?, ?, ?)';
     db.query(query, [nome, preco, descricao], (err, results) => {
         if (err) {
@@ -121,7 +122,20 @@ app.delete('/api/carrinho/:usuario_id/:produto_id', (req, res) => {
     });
 });
 
+// Rota para obter os favoritos de um usuário
+app.get('/api/favoritos/:usuario_id', (req, res) => {
+    const { usuario_id } = req.params;
 
+    const query = "SELECT produto_id FROM favoritos WHERE usuario_id = ?";
+    db.query(query, [usuario_id], (err, results) => {
+        if (err) {
+            console.error('Erro ao buscar favoritos:', err);
+            res.status(400).json({ erro: 'Erro ao buscar favoritos' });
+            return;
+        }
+        res.json({ data: results.map(row => row.produto_id) });
+    });
+});
 
 // Rota para favoritar um produto
 app.post('/api/favoritos', (req, res) => {

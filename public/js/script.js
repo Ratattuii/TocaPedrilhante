@@ -41,7 +41,7 @@ async function realizarLogin(event) {
     const email = document.getElementById('email').value;
     const senha = document.getElementById('senha').value;
 
-const response = await fetch(`${apiUrl}/usuarios/login`, {
+    const response = await fetch(`${apiUrl}/usuarios/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -52,7 +52,7 @@ const response = await fetch(`${apiUrl}/usuarios/login`, {
     const result = await response.json();
     if (result.sucesso) {
         alert(result.message);
-        window.location.href = './menu/index.html?id=${result.usuario.id}';
+        window.location.href = '../';
     } else {
         alert(result.message);
     }
@@ -182,8 +182,7 @@ async function removerProduto(id) {
 
 // ----------------------------------------------------------------------------
 
-async function carregarProdutosCatalogo() {
-
+async function carregarProdutosCatalogo(usuario_id) {
     try {
         const response = await fetch(`${apiUrl}/produtos`, {
             method: 'GET',
@@ -191,17 +190,29 @@ async function carregarProdutosCatalogo() {
                 'Content-Type': 'application/json'
             }
         });
-
         const result = await response.json();
+
         if (result.sucesso) {
             const produtos = result.data;
             const tabela = document.getElementById('produtos-catalogo');
             tabela.innerHTML = '';
 
+            const favoritosResponse = await fetch(`${apiUrl}/favoritos/${usuario_id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const favoritosResult = await favoritosResponse.json();
+            const favoritos = favoritosResult.data;
+
             produtos.forEach(produto => {
+                const isFavorito = favoritos.includes(produto.id);
                 const card = document.createElement('div');
                 card.className = 'col-md-6 mb-3';
-        
+
+                card.style.backgroundColor = isFavorito ? '#FFC0CB' : '';
+
                 card.innerHTML = `
                     <div class="card">
                         <div class="card-body">
@@ -209,6 +220,9 @@ async function carregarProdutosCatalogo() {
                             <h6 class="card-subtitle mb-2 text-muted">R$ ${produto.preco}</h6>
                             <p class="card-text">${produto.descricao}</p>
                             <button class="btn btn-primary" onclick="adicionarAoCarrinho(${produto.id})">Adicionar ao Carrinho</button>
+                            ${isFavorito ? 
+                                `<button class="btn btn-danger" onclick="desfavoritar(${usuario_id}, ${produto.id})">Desfavoritar</button>` : 
+                                `<button class="btn btn-secondary" onclick="favoritar(${usuario_id}, ${produto.id})">Favoritar</button>`}
                         </div>
                     </div>
                 `;
@@ -224,6 +238,53 @@ async function carregarProdutosCatalogo() {
 
 // ----------------------------------------------------------------------------
 
+async function favoritar(usuario_id, produtoId) {
+    try {
+        const response = await fetch(`${apiUrl}/favoritos`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ usuario_id, produto_id: produtoId })
+        });
+
+        const result = await response.json();
+        if (result.message) {
+            alert(result.message);
+            carregarProdutosCatalogo(usuario_id); // Recarregar os produtos
+        } else {
+            alert(result.erro);
+        }
+    } catch (error) {
+        alert('Erro ao favoritar o produto.');
+    }
+}
+
+// ----------------------------------------------------------------------------
+
+async function desfavoritar(usuario_id, produtoId) {
+    try {
+        const response = await fetch(`${apiUrl}/favoritos/${usuario_id}/${produtoId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const result = await response.json();
+        if (result.message) {
+            alert(result.message);
+            carregarProdutosCatalogo(usuario_id); // Recarregar os produtos
+        } else {
+            alert(result.erro);
+        }
+    } catch (error) {
+        alert('Erro ao desfavoritar o produto.');
+    }
+}
+
+// ----------------------------------------------------------------------------
+
 async function adicionarAoCarrinho(produto_id) {
     const usuario_id = getIdFromURL();
 
@@ -233,7 +294,7 @@ async function adicionarAoCarrinho(produto_id) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ usuario_id: usuario_id, produto_id, quantidade: 1})
+            body: JSON.stringify({ usuario_id, produto_id, quantidade: 1})
         });
 
         const result = await response.json();
@@ -248,47 +309,3 @@ async function adicionarAoCarrinho(produto_id) {
 }
 
 // ----------------------------------------------------------------------------
-
-async function atualizarCarrinho() {
-    try {
-
-        const response = await fetch(`${apiUrl}/carrinho/${usuario_id}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-
-        const carrinho = await response.json();
-        if (carrinho.error) {
-            alert('Erro ao carregar o carrinho: ' + carrinho.error);
-        } else {
-            const carrinho = document.getElementById('carrinho');
-            const precoCarrinho = document.getElementById('precoCarrinho');
-            let total = 0;
-
-            carrinho.innerHTML = '';
-            carrinho.forEach(item => {
-                total += item.preco * item.quantidade;
-
-                const listarProduto = document.createElement('li');
-                listarProduto.className = 'list-group-item d-flex justify-content-between align-items-center';
-
-                listarProduto.innerHTML = `
-                    <div>
-                        <h6>${item.nome} (x${item.quantidade})</h6>
-                        <small>R$ ${(item.preco * item.quantidade)}</small>
-                    </div>
-                    <button class="btn btn-danger btn-sm" onclick="removerDoCarrinho(${item.produto_id})">Remover</button>
-                `;
-
-                cartList.appendChild(listItem);
-            });
-
-            precoCarrinho.innerText = totalPrice;
-        }
-    } catch (error) {
-        alert('Ocorreu um erro ao tentar atualizar o carrinho.');
-    }
-}
-
