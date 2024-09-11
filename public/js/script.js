@@ -51,8 +51,9 @@ async function realizarLogin(event) {
 
     const result = await response.json();
     if (result.sucesso) {
+        const usuario_id = result.user.id;
         alert(result.message);
-        window.location.href = '../';
+        window.location.href = `./menu/index.html?id=${usuario_id}`;
     } else {
         alert(result.message);
     }
@@ -129,9 +130,35 @@ async function buscarProdutos() {
 
 // ----------------------------------------------------------------------------
 
+async function carregarDadosProduto() {
+    const produtoId = getIdFromURL(); // Obtém o ID do produto da URL
+
+    try {
+        const response = await fetch(`${apiUrl}/produto/${produtoId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const result = await response.json();
+        if (result.sucesso && result.data) {
+            // Preenche os campos do formulário com os dados do produto
+            document.getElementById('nomeNovo').value = result.data.nome;
+            document.getElementById('precoNovo').value = result.data.preco;
+            document.getElementById('descricaoNova').value = result.data.descricao;
+        } else {
+            alert('Erro ao carregar dados do produto: ' + result.message);
+        }
+    } catch (error) {
+        alert('Erro ao carregar produto.');
+    }
+}
+
+// ----------------------------------------------------------------------------
 
 async function editarProduto() {
-    const produtoId = getIdFromURL();
+    const produtoId = getIdFromURL(); // Obtém o ID do produto da URL
     const nome = document.getElementById('nomeNovo').value;
     const preco = document.getElementById('precoNovo').value;
     const descricao = document.getElementById('descricaoNova').value;
@@ -148,7 +175,7 @@ async function editarProduto() {
         const result = await response.json();
         if (result.sucesso) {
             alert('Produto atualizado com sucesso!');
-            window.location.href = './index.html';
+            window.location.href = './index.html'; // Redireciona após a edição
         } else {
             alert('Erro ao editar produto: ' + result.message);
         }
@@ -238,14 +265,16 @@ async function carregarProdutosCatalogo(usuario_id) {
 
 // ----------------------------------------------------------------------------
 
-async function favoritar(usuario_id, produtoId) {
+async function favoritar(usuario_id, produto_id) {
+    usuario_id = getIdFromURL()
+
     try {
         const response = await fetch(`${apiUrl}/favoritos`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ usuario_id, produto_id: produtoId })
+            body: JSON.stringify({ usuario_id, produto_id })
         });
 
         const result = await response.json();
@@ -262,9 +291,9 @@ async function favoritar(usuario_id, produtoId) {
 
 // ----------------------------------------------------------------------------
 
-async function desfavoritar(usuario_id, produtoId) {
+async function desfavoritar(usuario_id, produto_id) {
     try {
-        const response = await fetch(`${apiUrl}/favoritos/${usuario_id}/${produtoId}`, {
+        const response = await fetch(`${apiUrl}/favoritos/${usuario_id}/${produto_id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'

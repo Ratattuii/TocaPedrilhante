@@ -20,6 +20,24 @@ app.get('/api/produtos', (req, res) => {
     });
 });
 
+// Rota para buscar um produto específico pelo id
+app.get('/api/produto/:id', (req, res) => {
+    const { id } = req.params;
+
+    const query = 'SELECT nome, preco, descricao FROM produtos WHERE id = ?';
+    db.query(query, [id], (err, results) => {
+        if (err) {
+            res.json({ sucesso: false, message: 'Erro ao listar produto', erro: err });
+        } else if (results.length === 0) {
+            res.json({ sucesso: false, message: 'Produto não encontrado' });
+        } else {
+            res.json({ sucesso: true, message: 'Produto listado com sucesso', data: results[0] });
+        }
+    });
+});
+
+
+
 // Rota para adicionar um novo produto
 app.post('/api/produto', (req, res) => {
     const { nome, preco, descricao } = req.body;
