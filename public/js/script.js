@@ -41,22 +41,41 @@ async function realizarLogin(event) {
     const email = document.getElementById('email').value;
     const senha = document.getElementById('senha').value;
 
-    const response = await fetch(`${apiUrl}/usuarios/login`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, senha })
-    });
+    try {
+        const response = await fetch(`${apiUrl}/usuarios/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, senha })
+        });
 
-    const result = await response.json();
-    if (result.sucesso) {
-        const usuario_id = result.user.id;
-        alert(result.message);
-        window.location.href = `./menu/index.html?id=${usuario_id}`;
-    } else {
-        alert(result.message);
+        const result = await response.json();
+        if (result.sucesso) {
+
+            localStorage.setItem('usuario_id', result.user.id);
+            localStorage.setItem('usuario_nome', result.user.nome);
+            localStorage.setItem('usuario_email', result.user.email);
+
+            alert(result.message);
+
+            window.location.href = `./menu/index.html?id=${result.user.id}`;
+        } else {
+            alert(result.message);
+        }
+    } catch (error) {
+        alert('Ocorreu um erro ao tentar realizar o login.' + error);
     }
+}
+
+// ----------------------------------------------------------------------------
+
+async function logout() {
+    localStorage.removeItem('usuario_id');
+    localStorage.removeItem('usuario_nome');
+    localStorage.removeItem('usuario_email');
+    alert('Você foi deslogado com sucesso.');
+    window.location.href = '../';
 }
 
 // ----------------------------------------------------------------------------

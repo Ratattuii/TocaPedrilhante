@@ -6,7 +6,8 @@ CREATE TABLE IF NOT EXISTS Usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
-    senha VARCHAR(255) NOT NULL
+    senha VARCHAR(255) NOT NULL,
+    adm VARCHAR(1) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Produtos (
@@ -42,8 +43,12 @@ CREATE TABLE IF NOT EXISTS Compras (
     FOREIGN KEY (produto_id) REFERENCES Carrinho(produto_id)
 );
 
+CREATE USER 'tocapedrilhante'@'localhost' IDENTIFIED BY 'tocapedrilhante';
+GRANT ALL PRIVILEGES ON TocaPedrilhante.* TO 'tocapedrilhante'@'localhost';
+FLUSH PRIVILEGES;
+
 SELECT * FROM Usuarios;
 SELECT * FROM Produtos;
 SELECT * FROM Favoritos;
 SELECT * FROM Compras;
-SELECT * FROM CarrinhoItens;
+SELECT * FROM Carrinho;
