@@ -109,18 +109,35 @@ app.post('/api/usuarios/login', (req, res) => {
 // Endpoints do carrinho
 app.post('/api/carrinho', (req, res) => {
     const { usuario_id, produto_id, quantidade } = req.body;
-    db.query('INSERT INTO Carrinho (usuario_id, produto_id, quantidade) VALUES (?, ?, ?)', [usuario_id, produto_id, quantidade], (err, results) => {
+
+    db.query('SELECT id FROM Carrinho WHERE usuario_id = ? AND produto_id = ?', [usuario_id, produto_id], (err, results) => {
         if (err) {
-            res.status(400).json({sucesso: false, message: 'Erro ao tentar adicionar produto', erro: err });
+            res.status(400).json({ sucesso: false, message: 'Erro ao tentar adicionar produto', erro: err });
         } else {
-            res.status(200).json({sucesso: true, message: 'Produto adicionado ao carrinho com sucesso!', data:results });
+            if (results.length > 0) { // Verifica se o produto já está no carrinho
+                db.query('UPDATE Carrinho SET quantidade = quantidade + ? WHERE usuario_id = ? AND produto_id = ?', [quantidade, usuario_id, produto_id], (err, results) => {
+                    if (err) {
+                        res.status(400).json({ sucesso: false, message: 'Erro ao tentar atualizar o carrinho', erro: err });
+                    } else {
+                        res.status(200).json({ sucesso: true, message: 'Quantidade do produto atualizada no carrinho com sucesso!' });
+                    }
+                });
+            } else {
+                db.query('INSERT INTO Carrinho (usuario_id, produto_id, quantidade) VALUES (?, ?, ?)', [usuario_id, produto_id, quantidade], (err, results) => {
+                    if (err) {
+                        res.status(400).json({ sucesso: false, message: 'Erro ao tentar adicionar produto ao carrinho', erro: err });
+                    } else {
+                        res.status(200).json({ sucesso: true, message: 'Produto adicionado ao carrinho com sucesso!' });
+                    }
+                });
+            }
         }
     });
 });
 
 app.get('/api/carrinho/:usuario_id', (req, res) => {
     const { usuario_id } = req.params;
-    db.query('SELECT c.*, p.nome, p.preco FROM Carrinho c JOIN Produtos p ON c.produto_id = p.id WHERE c.usuario_id = ?', [usuario_id], (err, results) => {
+    db.query('SELECT c.*, p.nome, p.preco, c.quantidade, (p.preco * c.quantidade) AS total FROM Carrinho c JOIN Produtos p ON c.produto_id = p.id WHERE c.usuario_id = ?', [usuario_id], (err, results) => {
         if (err) {
             res.status(400).json({sucesso: false, message: 'Erro ao tentar mostrar carrinho', erro: err });
         } else {
@@ -131,14 +148,20 @@ app.get('/api/carrinho/:usuario_id', (req, res) => {
 
 app.delete('/api/carrinho/:usuario_id/:produto_id', (req, res) => {
     const { usuario_id, produto_id } = req.params;
+    
+    console.log("Removendo produto com produto_id:", produto_id);
+
     db.query('DELETE FROM Carrinho WHERE usuario_id = ? AND produto_id = ?', [usuario_id, produto_id], (err, results) => {
         if (err) {
+            console.log("Erro ao tentar remover produto do carrinho:", err);
             res.status(400).json({sucesso: false, message: 'Erro ao tentar remover produto do carrinho', erro: err });
         } else {
-            res.status(200).json({sucesso: true, message: 'Produto removido com sucesso!', data:results });
+            console.log("Remoção bem-sucedida:", results);
+            res.status(200).json({sucesso: true, message: 'Produto removido com sucesso!', data: results });
         }
     });
 });
+
 
 // Rota para obter os favoritos de um usuário
 app.get('/api/favoritos/:usuario_id', (req, res) => {
