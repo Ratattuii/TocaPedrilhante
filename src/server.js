@@ -148,8 +148,6 @@ app.get('/api/carrinho/:usuario_id', (req, res) => {
 
 app.delete('/api/carrinho/:usuario_id/:produto_id', (req, res) => {
     const { usuario_id, produto_id } = req.params;
-    
-    console.log("Removendo produto com produto_id:", produto_id);
 
     db.query('DELETE FROM Carrinho WHERE usuario_id = ? AND produto_id = ?', [usuario_id, produto_id], (err, results) => {
         if (err) {
@@ -161,7 +159,6 @@ app.delete('/api/carrinho/:usuario_id/:produto_id', (req, res) => {
         }
     });
 });
-
 
 // Rota para obter os favoritos de um usuário
 app.get('/api/favoritos/:usuario_id', (req, res) => {
