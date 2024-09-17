@@ -8,6 +8,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
+// ----------------------------------------------------------------------------
+
 // Rota para buscar todos os produtos
 app.get('/api/produtos', (req, res) => {
     const query = 'SELECT * FROM produtos';
@@ -19,6 +21,8 @@ app.get('/api/produtos', (req, res) => {
         }
     });
 });
+
+// ----------------------------------------------------------------------------
 
 // Rota para buscar um produto específico pelo id
 app.get('/api/produto/:id', (req, res) => {
@@ -36,7 +40,7 @@ app.get('/api/produto/:id', (req, res) => {
     });
 });
 
-
+// ----------------------------------------------------------------------------
 
 // Rota para adicionar um novo produto
 app.post('/api/produto', (req, res) => {
@@ -52,6 +56,8 @@ app.post('/api/produto', (req, res) => {
     });
 });
 
+// ----------------------------------------------------------------------------
+
 // Rota para editar um produto existente
 app.put('/api/produto/:id', (req, res) => {
     const { id } = req.params;
@@ -66,6 +72,8 @@ app.put('/api/produto/:id', (req, res) => {
     });
 });
 
+// ----------------------------------------------------------------------------
+
 // Rota para remover um produto
 app.delete('/api/produto/:id', (req, res) => {
     const { id } = req.params;
@@ -79,6 +87,8 @@ app.delete('/api/produto/:id', (req, res) => {
     });
 });
 
+// ----------------------------------------------------------------------------
+
 // Endpoints de usuários (Cadastro e Login)
 app.post('/api/usuarios/cadastrar', (req, res) => {
     const { nome, email, senha, adm } = req.body;
@@ -90,6 +100,8 @@ app.post('/api/usuarios/cadastrar', (req, res) => {
         }
     });
 });
+
+// ----------------------------------------------------------------------------
 
 app.post('/api/usuarios/login', (req, res) => {
     const { email, senha } = req.body;
@@ -109,6 +121,7 @@ app.post('/api/usuarios/login', (req, res) => {
     });
 });
 
+// ----------------------------------------------------------------------------
 
 // Endpoints do carrinho
 app.post('/api/carrinho', (req, res) => {
@@ -139,6 +152,8 @@ app.post('/api/carrinho', (req, res) => {
     });
 });
 
+// ----------------------------------------------------------------------------
+
 app.get('/api/carrinho/:usuario_id', (req, res) => {
     const { usuario_id } = req.params;
     db.query('SELECT c.*, p.nome, p.preco, c.quantidade, (p.preco * c.quantidade) AS total FROM Carrinho c JOIN Produtos p ON c.produto_id = p.id WHERE c.usuario_id = ?', [usuario_id], (err, results) => {
@@ -149,6 +164,8 @@ app.get('/api/carrinho/:usuario_id', (req, res) => {
         }
     });
 });
+
+// ----------------------------------------------------------------------------
 
 app.delete('/api/carrinho/:usuario_id/:produto_id', (req, res) => {
     const { usuario_id, produto_id } = req.params;
@@ -163,6 +180,8 @@ app.delete('/api/carrinho/:usuario_id/:produto_id', (req, res) => {
         }
     });
 });
+
+// ----------------------------------------------------------------------------
 
 // Rota para obter os favoritos de um usuário
 app.get('/api/favoritos/:usuario_id', (req, res) => {
@@ -179,6 +198,8 @@ app.get('/api/favoritos/:usuario_id', (req, res) => {
     });
 });
 
+// ----------------------------------------------------------------------------
+
 // Rota para favoritar um produto
 app.post('/api/favoritos', (req, res) => {
     const { usuario_id, produto_id } = req.body;
@@ -194,6 +215,8 @@ app.post('/api/favoritos', (req, res) => {
     });
 });
 
+// ----------------------------------------------------------------------------
+
 // Rota para desfavoritar um produto
 app.delete('/api/favoritos/:usuario_id/:produto_id', (req, res) => {
     const { usuario_id, produto_id } = req.params;
@@ -208,6 +231,52 @@ app.delete('/api/favoritos/:usuario_id/:produto_id', (req, res) => {
         res.json({ message: 'Favorito removido com sucesso' });
     });
 });
+
+// ----------------------------------------------------------------------------
+
+app.post('/api/finalizar-compra', (req, res) => {
+    const { usuario_id } = req.body;
+
+    db.query(`SELECT c.produto_id, c.quantidade, p.preco FROM Carrinho c JOIN Produtos p ON c.produto_id = p.id WHERE c.usuario_id = ?`, [usuario_id], (err, carrinho) => {
+        if (err) {
+            return res.status(500).json({ sucesso: false, message: 'Erro ao buscar o carrinho.' });
+        }
+
+        if (carrinho.length === 0) {
+            return res.status(400).json({ sucesso: false, message: 'Carrinho vazio.' });
+        }
+
+        // Variável para contar quantos itens já foram processados
+        let itensProcessados = 0;
+        const totalItens = carrinho.length;
+
+        carrinho.forEach((item) => {
+            const total = item.quantidade * item.preco;
+
+            db.query('INSERT INTO Compra (usuario_id, produto_id, total) VALUES (?, ?, ?)', [usuario_id, item.produto_id, total], (err, result) => {
+                if (err) {
+                    return res.status(500).json({ sucesso: false, message: 'Erro ao processar compra.' });
+                }
+
+                itensProcessados++;
+
+                // Se todos os itens forem processados, limpar o carrinho e enviar a resposta
+                if (itensProcessados === totalItens) {
+                    db.query('DELETE FROM Carrinho WHERE usuario_id = ?', [usuario_id], (err) => {
+                        if (err) {
+                            return res.status(500).json({ sucesso: false, message: 'Erro ao limpar o carrinho.' });
+                        }
+
+                        // Enviar resposta quando a compra for finalizada e o carrinho estiver vazio
+                        res.status(200).json({ sucesso: true, message: 'Compra finalizada com sucesso!' });
+                    });
+                }
+            });
+        });
+    });
+});
+
+// ----------------------------------------------------------------------------
 
 app.listen(port, () => {
     console.log(`Servidor rodando na porta ${port}`);

@@ -443,3 +443,28 @@ async function desfavoritar(usuario_id, produto_id) {
 }
 
 // ----------------------------------------------------------------------------
+
+async function finalizarCompra() {
+    const usuario_id = localStorage.getItem('usuario_id');
+
+    try {
+        const response = await fetch(`${apiUrl}/finalizar-compra`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ usuario_id })
+        });
+
+        const result = await response.json();
+
+        if (result.sucesso) {
+            alert(result.message);
+            // Aqui você pode redirecionar ou limpar a página do carrinho
+        } else {
+            alert('Erro ao finalizar a compra: ' + result.message);
+        }
+    } catch (error) {
+        alert('Ocorreu um erro ao finalizar a compra: ' + error);
+    }
+}
