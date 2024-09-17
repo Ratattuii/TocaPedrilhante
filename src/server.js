@@ -81,8 +81,8 @@ app.delete('/api/produto/:id', (req, res) => {
 
 // Endpoints de usuários (Cadastro e Login)
 app.post('/api/usuarios/cadastrar', (req, res) => {
-    const { nome, email, senha } = req.body;
-    db.query('INSERT INTO Usuarios (nome, email, senha) VALUES (?, ?, ?)', [nome, email, senha], (err, results) => {
+    const { nome, email, senha, adm } = req.body;
+    db.query('INSERT INTO Usuarios (nome, email, senha, adm) VALUES (?, ?, ?, ?)', [nome, email, senha, adm], (err, results) => {
         if (err) {
             res.status(400).json({ sucesso: false, message: 'Erro ao cadastrar usuario', erro: err });
         } else {
@@ -95,16 +95,20 @@ app.post('/api/usuarios/login', (req, res) => {
     const { email, senha } = req.body;
     db.query('SELECT * FROM Usuarios WHERE email = ? AND senha = ?', [email, senha], (err, results) => {
         if (err) {
-            res.status(401).json({sucesso: false, message: 'Erro ao realizar login', erro: err });
+            res.status(401).json({ sucesso: false, message: 'Erro ao realizar login', erro: err });
         } else {
             if (results.length > 0) {
-                res.status(200).json({ sucesso: true, message: 'Login realizado com sucesso!', user: results[0] });
+                const usuario = results[0];
+                const isAdmin = usuario.adm === '1'; 
+
+                res.status(200).json({ sucesso: true, message: 'Login realizado com sucesso!', user: usuario, admin: isAdmin });
             } else {
                 res.status(401).json({ sucesso: false, message: 'Credenciais inválidas' });
             }
         }
     });
 });
+
 
 // Endpoints do carrinho
 app.post('/api/carrinho', (req, res) => {
@@ -180,7 +184,7 @@ app.post('/api/favoritos', (req, res) => {
     const { usuario_id, produto_id } = req.body;
 
     const query = "INSERT INTO favoritos (usuario_id, produto_id) VALUES (?, ?)";
-    db.query(query, [usuario_id, produto_id], (err, result) => {
+    db.query(query, [usuario_id, produto_id], (err, results) => {
         if (err) {
             console.error('Erro ao favoritar produto:', err);
             res.status(400).json({ erro: 'Erro ao favoritar produto' });

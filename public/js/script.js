@@ -9,6 +9,20 @@ function getIdFromURL() {
     return urlParams.get('id');
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    verificarAdm();
+});
+
+function verificarAdm() {
+    const isAdmin = localStorage.getItem('usuario_adm');
+
+    if (isAdmin === '1') {
+        document.getElementById('admin-link').style.display = 'block';
+    } else {
+        document.getElementById('admin-link').style.display = 'none';
+    }
+}
+
 // ----------------------------------------------------------------------------
 
 async function cadastrarUsuario(event) {
@@ -16,6 +30,7 @@ async function cadastrarUsuario(event) {
     const nome = document.getElementById('nome').value;
     const email = document.getElementById('email').value;
     const senha = document.getElementById('senha').value;
+    const adm = document.getElementById('adm').checked ? '1' : '0';
 
     try {
         const response = await fetch(`${apiUrl}/usuarios/cadastrar`, {
@@ -23,7 +38,7 @@ async function cadastrarUsuario(event) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ nome, email, senha })
+            body: JSON.stringify({ nome, email, senha, adm })
         });
 
         const result = await response.json();
@@ -37,6 +52,7 @@ async function cadastrarUsuario(event) {
         alert('Ocorreu um erro ao tentar realizar o cadastro.');
     }
 };
+
 
 // ----------------------------------------------------------------------------
 
@@ -60,6 +76,7 @@ async function realizarLogin(event) {
             localStorage.setItem('usuario_id', result.user.id);
             localStorage.setItem('usuario_nome', result.user.nome);
             localStorage.setItem('usuario_email', result.user.email);
+            localStorage.setItem('usuario_adm', result.user.adm);
 
             alert(result.message);
 
@@ -75,9 +92,7 @@ async function realizarLogin(event) {
 // ----------------------------------------------------------------------------
 
 async function logout() {
-    localStorage.removeItem('usuario_id');
-    localStorage.removeItem('usuario_nome');
-    localStorage.removeItem('usuario_email');
+    localStorage.clear();
     alert('Você foi deslogado com sucesso.');
     window.location.href = '../';
 }
