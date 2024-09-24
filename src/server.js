@@ -250,6 +250,8 @@ app.post('/api/finalizar-compra', (req, res) => {
         let itensProcessados = 0;
         const totalItens = carrinho.length;
 
+        console.log(itensProcessados, totalItens);
+
         carrinho.forEach((item) => {
             const total = item.quantidade * item.preco;
 
