@@ -23,6 +23,10 @@ function verificarAdm() {
     }
 }
 
+function atualizarTotalCarrinho() {
+    document.getElementById('total-produtos-carrinho').textContent = totalCarrinho;
+}
+
 // ----------------------------------------------------------------------------
 
 async function cadastrarUsuario(event) {
@@ -213,7 +217,7 @@ async function editarProduto() {
         const result = await response.json();
         if (result.sucesso) {
             alert('Produto atualizado com sucesso!');
-            window.location.href = './index.html'; // Redireciona após a edição
+            window.location.href = './index.html';
         } else {
             alert('Erro ao editar produto: ' + result.message);
         }
@@ -320,6 +324,9 @@ async function carregarProdutosCarrinho() {
             const tabela = document.getElementById('produtos-carrinho');
             tabela.innerHTML = '';
 
+            // Reinicia o total do carrinho ao carregar os itens
+            totalCarrinho = 0;
+
             carrinho.forEach(produto => {
                 const card = document.createElement('div');
                 card.className = 'col-md-6 mb-3';
@@ -334,8 +341,14 @@ async function carregarProdutosCarrinho() {
                         </div>
                     </div>
                 `;
+
+                // Soma o preço total de cada produto no carrinho
+                totalCarrinho += produto.preco * produto.quantidade;
                 tabela.appendChild(card);
             });
+
+            // Atualiza o total exibido
+            atualizarTotalCarrinho();
         } else {
             alert(result.message + ":" + result.erro);
         }
@@ -355,12 +368,13 @@ async function adicionarAoCarrinho(produto_id) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ usuario_id, produto_id, quantidade: 1})
+            body: JSON.stringify({ usuario_id, produto_id, quantidade: 1 })
         });
 
         const result = await response.json();
         if (result.sucesso) {
             alert(result.message);
+            atualizarTotalCarrinho();
             carregarProdutosCarrinho(usuario_id);
         } else {
             alert('Erro ao adicionar ao carrinho: ' + result.message);
@@ -369,6 +383,7 @@ async function adicionarAoCarrinho(produto_id) {
         alert('Ocorreu um erro ao tentar adicionar o produto ao carrinho.' + erro);
     }
 }
+
 
 // ----------------------------------------------------------------------------
 
@@ -410,7 +425,7 @@ async function favoritar(usuario_id, produto_id) {
         const result = await response.json();
         if (result.message) {
             alert(result.message);
-            carregarProdutosCatalogo(usuario_id); // Recarregar os produtos
+            carregarProdutosCatalogo(usuario_id);
         } else {
             alert(result.erro);
         }
@@ -460,7 +475,8 @@ async function finalizarCompra() {
 
         if (result.sucesso) {
             alert(result.message);
-            // Aqui você pode redirecionar ou limpar a página do carrinho
+            carregarProdutosCarrinho(usuario_id);
+            window.location.href= '/public/compra-finalizada/index.html';
         } else {
             alert('Erro ao finalizar a compra: ' + result.message);
         }

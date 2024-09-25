@@ -24,15 +24,20 @@
 
 <body>
 
-    <div class="row">
-        <div class="col-md-8">
-            <div id="produtos-catalogo" class="row"></div>
+    <div class="container">
+        <div class="d-flex justify-content-between mb-3">
+            <a href="../menu/" class="btn btn-secondary">Voltar</a>
         </div>
-        <div class="col-md-4">
-            <h4>Carrinho</h4>
-            <ul id="produtos-carrinho" class="list-group mb-3"></ul>
-            <h5>Total: R$ <span id="total-produtos-carrinho">0.00</span></h5>
-            <button onclick="finalizarCompra()" class="btn btn-success">Finalizar Compra</button>
+        <div class="row">
+            <div class="col-md-8">
+                <div id="produtos-catalogo" class="row"></div>
+            </div>
+            <div class="col-md-4">
+                <h4>Carrinho</h4>
+                <ul id="produtos-carrinho" class="list-group mb-3"></ul>
+                <h5>Total: R$ <span id="total-produtos-carrinho">0.00</span></h5>
+                <button onclick="finalizarCompra()" class="btn btn-success">Finalizar Compra</button>
+            </div>
         </div>
     </div>
     

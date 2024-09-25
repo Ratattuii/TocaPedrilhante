@@ -255,7 +255,7 @@ app.post('/api/finalizar-compra', (req, res) => {
         carrinho.forEach((item) => {
             const total = item.quantidade * item.preco;
 
-            db.query('INSERT INTO Compra (usuario_id, produto_id, total) VALUES (?, ?, ?)', [usuario_id, item.produto_id, total], (err, result) => {
+            db.query('INSERT INTO Compras (usuario_id, produto_id, total) VALUES (?, ?, ?)', [usuario_id, item.produto_id, total], (err, result) => {
                 if (err) {
                     return res.status(500).json({ sucesso: false, message: 'Erro ao processar compra.' });
                 }
@@ -266,10 +266,11 @@ app.post('/api/finalizar-compra', (req, res) => {
                 if (itensProcessados === totalItens) {
                     db.query('DELETE FROM Carrinho WHERE usuario_id = ?', [usuario_id], (err) => {
                         if (err) {
+                            console.error('Erro ao limpar o carrinho:', err.message); // Mostra o erro completo
                             return res.status(500).json({ sucesso: false, message: 'Erro ao limpar o carrinho.' });
                         }
-
-                        // Enviar resposta quando a compra for finalizada e o carrinho estiver vazio
+                    
+                        // Se a deleção for bem-sucedida
                         res.status(200).json({ sucesso: true, message: 'Compra finalizada com sucesso!' });
                     });
                 }
