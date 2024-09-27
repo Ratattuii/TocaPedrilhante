@@ -36,6 +36,10 @@
                         <label for="descricao" class="form-label">Descrição</label>
                         <textarea class="form-control" id="descricao" rows="3" placeholder="Digite a descrição do produto" required></textarea>
                     </div>
+                    <div class="mb-3">
+                        <label for="imagem">Imagem:</label>
+                        <input type="file" id="imagem" name="imagem" accept="image/*" required><br>
+                    </div>
                     <button type="button" class="btn btn-primary w-100" onclick="cadastrarProduto(event)">Cadastrar Produto</button>
                 </form>
             </div>

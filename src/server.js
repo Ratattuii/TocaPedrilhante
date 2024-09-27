@@ -44,10 +44,10 @@ app.get('/api/produto/:id', (req, res) => {
 
 // Rota para adicionar um novo produto
 app.post('/api/produto', (req, res) => {
-    const { nome, preco, descricao } = req.body;
+    const { nome, preco, descricao, imagem } = req.body;
 
-    const query = 'INSERT INTO produtos (nome, preco, descricao) VALUES (?, ?, ?)';
-    db.query(query, [nome, preco, descricao], (err, results) => {
+    const query = 'INSERT INTO produtos (nome, preco, descricao, imagem) VALUES (?, ?, ?, ?)';
+    db.query(query, [nome, preco, descricao, imagem], (err, results) => {
         if (err) {
             res.status(400).json({ sucesso: false, message: 'Erro ao adicionar produto', erro: err});
         } else {

@@ -105,9 +105,12 @@ async function logout() {
 
 async function cadastrarProduto(event) {
     event.preventDefault();
-    const nome = document.getElementById('nome').value;
-    const preco = document.getElementById('preco').value;
-    const descricao = document.getElementById('descricao').value;
+
+    const formData = new FormData();
+    formData.append('nome', document.getElementById('nome').value);
+    formData.append('preco', document.getElementById('preco').value);
+    formData.append('descricao', document.getElementById('descricao').value);
+    formData.append('imagem', document.getElementById('imagem').files[0]);
 
     try {
         const response = await fetch(`${apiUrl}/produto`, {
@@ -149,6 +152,7 @@ async function buscarProdutos() {
 
             produtos.forEach(produto => {
                 const row = document.createElement('tr');
+
 
                 row.innerHTML = `
                     <td>${produto.nome}</td>
