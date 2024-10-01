@@ -1,12 +1,14 @@
 const express = require('express');
 const cors = require('cors');
+const db = require('./dbconfig')
+const upload = require('./multer');
+const multer = require('multer');
 const app = express();
 const port = 3000;
-const db = require('./dbconfig')
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static('public'));  
 
 // ----------------------------------------------------------------------------
 
@@ -43,8 +45,14 @@ app.get('/api/produto/:id', (req, res) => {
 // ----------------------------------------------------------------------------
 
 // Rota para adicionar um novo produto
-app.post('/api/produto', (req, res) => {
-    const { nome, preco, descricao, imagem } = req.body;
+app.post('/api/produto',  upload.single('imagem'), (req, res) => {
+    const { nome, preco, descricao } = req.body;
+
+    // Pega o nome do arquivo da imagem
+    const imagem = req.file ? req.file.filename : null;
+
+    // Verifica o que está sendo capturado
+    console.log({ nome, preco, descricao, imagem });
 
     const query = 'INSERT INTO produtos (nome, preco, descricao, imagem) VALUES (?, ?, ?, ?)';
     db.query(query, [nome, preco, descricao, imagem], (err, results) => {
