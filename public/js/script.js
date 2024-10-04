@@ -105,17 +105,17 @@ async function logout() {
 
 async function cadastrarProduto(event) {
     event.preventDefault();
-    const nome = document.getElementById('nome').value;
-    const preco = document.getElementById('preco').value;
-    const descricao = document.getElementById('descricao').value;
+    
+    const formData = new FormData();
+    formData.append('nome', document.getElementById('nome').value);
+    formData.append('preco', document.getElementById('preco').value);
+    formData.append('descricao', document.getElementById('descricao').value);
+    formData.append('imagem', document.getElementById('imagem').files[0]); // Seleciona a imagem
 
     try {
         const response = await fetch(`${apiUrl}/produto`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ nome, preco, descricao })
+            body: formData
         });
 
         const result = await response.json();
@@ -123,7 +123,7 @@ async function cadastrarProduto(event) {
             alert(result.message);
             location.reload();
         } else {
-            alert(result.message + ":" + result.erro);
+            alert(result.message + ": " + result.erro);
         }
     } catch (error) {
         alert('Ocorreu um erro ao tentar realizar o cadastro.');
@@ -150,10 +150,12 @@ async function buscarProdutos() {
             produtos.forEach(produto => {
                 const row = document.createElement('tr');
 
+
                 row.innerHTML = `
                     <td>${produto.nome}</td>
                     <td>R$ ${produto.preco}</td>
                     <td>${produto.descricao}</td>
+                    <td>${produto.imagem}</td>
                     <td>
                         <a href="./editar.html?id=${produto.id}" class="btn btn-warning btn-sm">Editar</a>
                         <a class="btn btn-danger btn-sm" onclick="removerProduto(${produto.id})">Remover</a>
@@ -284,6 +286,7 @@ async function carregarProdutosCatalogo() {
 
                 card.innerHTML = `
                     <div class="card">
+                    <img src="/assets/images/${produto.imagem}" class="card-img-top" alt="${produto.nome}" style="object-fit: cover;">
                         <div class="card-body">
                             <h5 class="card-title">${produto.nome}</h5>
                             <h6 class="card-subtitle mb-2 text-muted">R$ ${produto.preco}</h6>
