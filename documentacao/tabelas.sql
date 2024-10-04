@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS Compras (
     produto_id INT NOT NULL,
     total DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (usuario_id) REFERENCES Usuarios(id),
-    FOREIGN KEY (produto_id) REFERENCES Carrinho(produto_id)
+    FOREIGN KEY (produto_id) REFERENCES Produtos(id)
 );
 
 CREATE USER 'tocapedrilhante'@'localhost' IDENTIFIED BY 'tocapedrilhante';
