@@ -107,11 +107,11 @@
 
 2. Instale as dependências:
    ```bash
-   npm install
+   npm install mysql2 nodemon cors express
    ```
 
 3. Configure o banco de dados:
-    O código está disponível no arquivo tabelas.sql
+    O código está disponível no arquivo /documentacao/tabelas.sql
 
 4. Execute o projeto:
    ```bash

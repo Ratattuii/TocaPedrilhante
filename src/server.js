@@ -51,9 +51,6 @@ app.post('/api/produto',  upload.single('imagem'), (req, res) => {
     // Pega o nome do arquivo da imagem
     const imagem = req.file ? req.file.filename : null;
 
-    // Verifica o que está sendo capturado
-    console.log({ nome, preco, descricao, imagem });
-
     const query = 'INSERT INTO produtos (nome, preco, descricao, imagem) VALUES (?, ?, ?, ?)';
     db.query(query, [nome, preco, descricao, imagem], (err, results) => {
         if (err) {

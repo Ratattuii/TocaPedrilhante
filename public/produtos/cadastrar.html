@@ -14,32 +14,35 @@
     </style>
 </head>
 
-<body class="bg-light-purple">
+<body class="bg-roxo-claro">
     <div class="container py-5">
-        <h1 class="text-center text-purple mb-4">Cadastro de Produto</h1>
+        <div class="d-flex mb-3">
+            <a href="./index.html" class="btn btn-secondary">Voltar para Administração</a>
+        </div>
+        <h1 class="text-center mb-4">Cadastro de Produto</h1>
 
         <form class="bg-modal p-4 rounded shadow-sm" onsubmit="cadastrarProduto(event)">
             <div class="mb-3">
-                <label for="nome" class="form-label text-dark-green">Nome do Produto</label>
-                <input type="text" id="nome" class="form-control border-dark-green" required>
+                <label for="nome" class="form-label text-verde-claro">Nome do Produto</label>
+                <input type="text" id="nome" class="form-control border-verde-escuro" required>
             </div>
 
             <div class="mb-3">
-                <label for="preco" class="form-label text-dark-green">Preço</label>
-                <input type="text" id="preco" class="form-control border-dark-green" required>
+                <label for="preco" class="form-label text-verde-claro">Preço</label>
+                <input type="text" id="preco" class="form-control border-verde-escuro" required>
             </div>
 
             <div class="mb-3">
-                <label for="descricao" class="form-label text-dark-green">Descrição</label>
-                <input type="text" id="descricao" class="form-control border-dark-green" required>
+                <label for="descricao" class="form-label text-verde-claro">Descrição</label>
+                <input type="text" id="descricao" class="form-control border-verde-escuro" required>
             </div>
 
             <div class="mb-3">
-                <label for="formFileSm" class="form-label text-dark-green">Imagem do Produto</label>
-                <input type="file" id="formFileSm" class="form-control border-dark-green" required>
+                <label for="formFileSm" class="form-label text-verde-claro">Imagem do Produto</label>
+                <input type="file" id="formFileSm" class="form-control border-verde-escuro" required>
             </div>
 
-            <div class="bg-btn">
+            <div class="bg-roxo-claro" style="border-radius: 8px;">
                 <button type="submit" class="btn btn-purple w-100">Cadastrar Produto</button>
             </div>
         </form>

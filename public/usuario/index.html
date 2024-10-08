@@ -11,33 +11,36 @@
         .container {
             margin-top: 50px;
         }
-    </style>
+        </style>
 </head>
 
-<body class="bg-light-purple d-flex align-items-center" style="height: 100vh;">
+<body class="bg-roxo-claro d-flex align-items-center" style="height: 100vh;">
     <div class="container d-flex justify-content-center">
         <div>
-            <div class="bg-modal shadow-lg p-4" style="width: 100%; max-width: 400px; border-radius: 8px;">
-                <h2 class="card-title text-center mb-4">Cadastro de Usuário</h2>
-                    <div class="mb-3">
-                        <label for="nome" class="form-label text-dark-green">Nome</label>
-                        <input type="text" class="form-control border-dark-green" id="nome" placeholder="Digite seu nome" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label text-dark-green">Email</label>
-                        <input type="email" class="form-control border-dark-green" id="email" placeholder="Digite seu email" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="senha" class="form-label text-dark-green">Senha</label>
-                        <input type="password" class="form-control border-dark-green" id="senha" placeholder="Digite sua senha" required>
-                    </div>
-                    <div class="form-check mb-3">
-                        <input type="checkbox" class="form-check-input border-dark-green" id="adm">
-                        <label class="form-check-label text-dark-green" for="adm">Marque se você for administrador</label>
-                    </div>
-                    <div class="bg-btn">
-                        <button type="submit" class="btn btn-purple w-100" onclick="cadastrarUsuario(event)">Cadastrar</button>
-                    </div>
+            <div class="bg-modal shadow-lg p-4" style="width: 100%; max-width: 500px; border-radius: 8px;">
+                <h2 class="card-title text-center mb-4 text-roxo-escuro">Cadastro de Usuário</h2>
+                <div class="mb-3">
+                    <label for="nome" class="form-label text-verde-claro">Nome</label>
+                    <input type="text" class="form-control border-verde-escuro" id="nome" placeholder="Digite seu nome" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label text-verde-claro">Email</label>
+                    <input type="email" class="form-control border-verde-escuro" id="email" placeholder="Digite seu email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="senha" class="form-label text-verde-claro">Senha</label>
+                    <input type="password" class="form-control border-verde-escuro" id="senha" placeholder="Digite sua senha" required>
+                </div>
+                <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input border-verde-escuro" id="adm">
+                    <label class="form-check-label text-verde-claro" for="adm">Marque se você for administrador</label>
+                </div>
+                <div class="bg-roxo-claro" style="border-radius: 8px;">
+                    <button type="submit" class="btn btn-purple w-100" onclick="cadastrarUsuario(event)">Cadastrar</button>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center mb-3">
+                <a href="../index.html" class="btn btn-secondary">Voltar</a>
             </div>
         </div>
     </div>
