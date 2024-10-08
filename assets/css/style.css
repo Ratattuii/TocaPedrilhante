@@ -71,6 +71,10 @@ button:hover {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.list-item{
+    list-style: none;
+}
+
 /* Definição de cores */
 .bg-roxo-claro {
     background-color: #E8D5E7;
