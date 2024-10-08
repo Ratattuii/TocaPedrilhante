@@ -1,12 +1,19 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
     background-color: #f4f4f4;
+    color: #333;
+    padding: 20px;
 }
 
 h1 {
-    color: #333;
+    color: #6A0DAD; /* Roxo */
     text-align: center;
     margin-bottom: 20px;
 }
@@ -15,7 +22,7 @@ a {
     display: inline-block;
     margin: 10px;
     text-decoration: none;
-    color: #0066cc;
+    color: #4CAF50; /* Verde */
 }
 
 form {
@@ -31,20 +38,21 @@ label {
     display: block;
     margin-bottom: 8px;
     font-weight: bold;
+    color: #4CAF50; /* Verde */
 }
 
 input[type="text"], input[type="email"], input[type="password"] {
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
-    border: 1px solid #ccc;
+    border: 1px solid #6A0DAD; /* Roxo */
     border-radius: 4px;
 }
 
 button {
     width: 100%;
     padding: 10px;
-    background-color: #0066cc;
+    background-color: #6A0DAD; /* Roxo */
     color: white;
     border: none;
     border-radius: 4px;
@@ -52,7 +60,7 @@ button {
 }
 
 button:hover {
-    background-color: #005bb5;
+    background-color: #530D99; /* Roxo escuro */
 }
 
 #produtos div, #carrinho div {
@@ -61,4 +69,81 @@ button:hover {
     margin-bottom: 10px;
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Definição de cores */
+.bg-roxo-claro {
+    background-color: #E8D5E7;
+}
+
+.bg-roxo-medio {
+    background-color: #D1A3E0;
+}
+
+.bg-roxo-escuro {
+    background-color: #A06AB8;
+}
+
+.bg-verde-claro {
+    background-color: #C8E6C9;
+}
+
+.bg-verde-medio {
+    background-color: #A5D6A7;
+}
+
+.bg-verde-escuro {
+    background-color: #388E3C;
+}
+
+.text-branco {
+    color: #FFFFFF;
+}
+
+.text-roxo-claro {
+    color: #E8D5E7;
+}
+
+.text-roxo-medio {
+    color: #D1A3E0;
+}
+
+.text-roxo-escuro {
+    color: #A06AB8;
+}
+
+.text-verde-claro {
+    color: #C8E6C9;
+}
+
+.text-verde-medio {
+    color: #A5D6A7;
+}
+
+.text-verde-escuro {
+    color: #388E3C;
+}
+
+.text-cinza-claro {
+    color: #F4F4F4;
+}
+
+.text-cinza-escuro {
+    color: #B0BEC5;
+}
+
+.border-roxo-medio {
+    border: 1px solid #D1A3E0;
+}
+
+.border-verde-escuro {
+    border: 1px solid #388E3C;
+}
+
+.shadow-roxo-escuro {
+    box-shadow: 0 4px 8px rgba(160, 106, 184, 0.2);
+}
+
+.shadow-verde-escuro {
+    box-shadow: 0 4px 8px rgba(56, 142, 60, 0.2);
 }

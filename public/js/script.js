@@ -105,12 +105,13 @@ async function logout() {
 
 async function cadastrarProduto(event) {
     event.preventDefault();
-    
+
+    // Pega os valores dos campos
     const formData = new FormData();
     formData.append('nome', document.getElementById('nome').value);
     formData.append('preco', document.getElementById('preco').value);
     formData.append('descricao', document.getElementById('descricao').value);
-    formData.append('imagem', document.getElementById('imagem').files[0]); // Seleciona a imagem
+    formData.append('imagem', document.getElementById('formFileSm').files[0]); // Corrigido o ID para 'formFileSm'
 
     try {
         const response = await fetch(`${apiUrl}/produto`, {
@@ -123,12 +124,13 @@ async function cadastrarProduto(event) {
             alert(result.message);
             location.reload();
         } else {
-            alert(result.message + ": " + result.erro);
+            alert('Erro no cadastro: ' + result.message);
         }
     } catch (error) {
         alert('Ocorreu um erro ao tentar realizar o cadastro.');
+        console.error('Erro:', error);
     }
-};
+}
 
 // ----------------------------------------------------------------------------
 
