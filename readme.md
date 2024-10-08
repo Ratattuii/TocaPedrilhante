@@ -1,48 +1,121 @@
-# Toca Pedrilhante
 
-## Descrição
+# 🪄 TocaPedrilhante 🛍️
 
-**Toca Pedrilhante** é um projeto de website para um restaurante fictício especializado em comidas exóticas inspiradas em histórias medievais de livros de aventura. O site proporciona uma experiência imersiva, transportando o usuário para um ambiente medieval através de suas ilustrações e interface.
+**TocaPedrilhante** é uma loja online que oferece produtos mágicos e extraordinários. Este projeto foi desenvolvido para permitir que os usuários naveguem pelo catálogo de produtos, gerenciem suas compras e, para administradores, a capacidade de gerenciar os itens à venda.
 
-## Tecnologias Utilizadas
+## 🌟 Funcionalidades Principais
 
-- **HTML**: Estrutura do site.
-- **CSS**: Estilização e layout.
-- **JavaScript**: Funcionalidades interativas.
+- 🔐 **Login de Usuários**
+- 📝 **Cadastro de Novos Usuários**
+- 📦 **Catálogo de Produtos**
+- ❤️ **Favoritar Produtos**
+- 🛒 **Carrinho de Compras**
+- 🛠️ **Administração de Produtos** (para usuários com permissão de administrador)
+- ✏️ **Edição e Cadastro de Produtos**
 
-## Estrutura do Site
+---
 
-### Tela Inicial
+## 🖥️ Páginas do Sistema
 
-- **Descrição**: A página de boas-vindas ao site do restaurante, contendo uma ilustração do estabelecimento fictício.
-- **Componentes**:
-  - Ilustração do estabelecimento.
-  - Menu de navegação para as outras seções do site.
+### 1. Página de Login
 
-### Tela do Estabelecimento
+- **Descrição**: Esta é a página inicial que o usuário visualiza ao acessar o site.
+- **Funcionalidade**:
+  - Pede o **email** e **senha** do usuário.
+  - Botão "Login" que, ao ser clicado, redireciona o usuário à página **Home** (Página Inicial).
+  - Botão "Cadastre-se" que redireciona o usuário à página de **Cadastro**.
 
-- **Descrição**: Mostra o interior do restaurante, focando na bancada onde ficam os itens disponíveis para compra.
-- **Componentes**:
-  - Ilustração da bancada.
-  - Botões de navegação para a prateleira de itens.
+### 2. Página de Cadastro de Usuário
 
-### Tela da Prateleira de Itens
+- **Descrição**: Página onde novos usuários podem criar uma conta.
+- **Funcionalidade**:
+  - Pede o **nome**, **email** e **senha**.
+  - Checkbox para o usuário marcar caso seja um administrador.
+  - Após o cadastro, o usuário é redirecionado à **Página de Login**.
 
-- **Descrição**: Exibe uma prateleira com os itens exóticos disponíveis para compra.
-- **Componentes**:
-  - Lista de itens disponíveis com descrições e preços.
-  - Botões para adicionar itens ao carrinho de compras.
-  - Mostrador do preço total da compra
+### 3. Página Inicial / Home
 
-### Tela de Finalização da Compra
+- **Descrição**: Página de boas-vindas ao site após o login.
+- **Funcionalidade**:
+  - Contém três links:
+    - 🛍️ **Catálogo**: Redireciona o usuário à **Página de Catálogo**.
+    - 🚪 **Sair**: Faz o logout do usuário e o redireciona à **Página de Login**.
+    - 🛠️ **Administração de Produtos**: Visível apenas para administradores, redireciona o usuário à página de **Administração de Produtos**.
 
-- **Descrição**:  Finalização do pedido.
-- **Componentes**:
-  - Botão para finalizar a compra.
+### 4. Página de Catálogo
 
-## Funcionalidades
+- **Descrição**: Exibe todos os produtos da loja.
+- **Funcionalidade**:
+  - Cada produto tem uma imagem, nome, descrição e preço.
+  - Dois botões:
+    - ➕ **Adicionar ao Carrinho**: Adiciona o produto ao carrinho, que é exibido na mesma página.
+    - ❤️ **Favoritar Produto**: Permite ao usuário favoritar o produto.
+  - 🛒 **Carrinho**: Apresenta os produtos adicionados ao carrinho, que o usuário pode revisar.
 
-- **Adicionar Itens ao Carrinho**: Usuários podem adicionar itens da prateleira ao carrinho de compras.
-- **Visualizar Carrinho de Compras**: Exibe os itens selecionados e o preço total.
-- **Remover Itens do Carrinho**: Usuários podem remover itens do carrinho antes de finalizar a compra.
-- **Finalizar Compra**: Conclui o processo de compra, exibindo uma mensagem de confirmação.
+### 5. Página de Administração de Produtos (somente para admins)
+
+- **Descrição**: Permite aos administradores gerenciar os produtos da loja.
+- **Funcionalidade**:
+  - Tabela que lista todos os produtos com:
+    - Nome
+    - Descrição
+    - Preço
+  - Ao lado de cada produto há dois botões:
+    - ✏️ **Editar Produto**: Redireciona para a página de **Edição de Produto**.
+    - 🗑️ **Remover Produto**: Remove o produto do banco de dados.
+  - No topo da página, há dois botões:
+    - 🔙 **Voltar**: Leva o usuário de volta à **Página Inicial**.
+    - ➕ **Cadastrar Produto**: Redireciona à página de **Cadastro de Produto**.
+
+### 6. Página de Cadastro de Produtos
+
+- **Descrição**: Permite aos administradores cadastrar novos produtos.
+- **Funcionalidade**:
+  - Formulário solicitando:
+    - **Nome do Produto**
+    - **Preço**
+    - **Descrição**
+
+### 7. Página de Edição de Produtos
+
+- **Descrição**: Permite editar os detalhes de um produto já existente.
+- **Funcionalidade**:
+  - Exibe um formulário com os dados do produto selecionado (nome, preço, descrição).
+  - Os administradores podem alterar essas informações e salvar as alterações.
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+- **HTML**
+- **CSS**
+- **JavaScript**
+- **SQL** para gerenciamento dos dados (produtos, usuários, etc.)
+- **Express** para gerenciamento das rotas e API
+- **MySQL** para o banco de dados
+- **Nodemon** para facilitar o desenvolvimento
+- **CORS** para controle de acesso
+
+---
+
+## 🚀 Como Rodar o Projeto
+
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/seu-repo/tocapedrilhante.git
+   ```
+
+2. Instale as dependências:
+   ```bash
+   npm install
+   ```
+
+3. Configure o banco de dados:
+    O código está disponível no arquivo tabelas.sql
+
+4. Execute o projeto:
+   ```bash
+   npm start
+   ```
+
+5. O site estará disponível no endereço `http://localhost:3000`.
