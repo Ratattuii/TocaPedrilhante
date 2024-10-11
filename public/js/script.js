@@ -98,15 +98,12 @@ async function cadastrarProduto(event) {
     formData.append('nome', document.getElementById('nome').value);
     formData.append('preco', document.getElementById('preco').value);
     formData.append('descricao', document.getElementById('descricao').value);
-    formData.append('imagem', document.getElementById('imagem').files[0]);
+    formData.append('imagem', document.getElementById('formFileSm').files[0]);
 
     try {
         const response = await fetch(`${apiUrl}/produto`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ nome, preco, descricao })
+            body: formData
         });
 
         const result = await response.json();
@@ -114,12 +111,13 @@ async function cadastrarProduto(event) {
             alert(result.message);
             location.reload();
         } else {
-            alert(result.message + ":" + result.erro);
+            alert('Erro no cadastro: ' + result.message);
         }
     } catch (error) {
         alert('Ocorreu um erro ao tentar realizar o cadastro.');
+        console.error('Erro:', error);
     }
-};
+}
 
 // ----------------------------------------------------------------------------
 
@@ -146,6 +144,7 @@ async function buscarProdutos() {
                     <td>${produto.nome}</td>
                     <td>R$ ${produto.preco}</td>
                     <td>${produto.descricao}</td>
+                    <td>${produto.imagem}</td>
                     <td>
                         <a href="./editar.html?id=${produto.id}" class="btn btn-warning btn-sm">Editar</a>
                         <a class="btn btn-danger btn-sm" onclick="removerProduto(${produto.id})">Remover</a>
@@ -165,7 +164,7 @@ async function buscarProdutos() {
 // ----------------------------------------------------------------------------
 
 async function carregarDadosProduto() {
-    const produtoId = getIdFromURL(); // Obtém o ID do produto da URL
+    const produtoId = getIdFromURL(); 
 
     try {
         const response = await fetch(`${apiUrl}/produto/${produtoId}`, {
@@ -177,7 +176,6 @@ async function carregarDadosProduto() {
 
         const result = await response.json();
         if (result.sucesso && result.data) {
-            // Preenche os campos do formulário com os dados do produto
             document.getElementById('nomeNovo').value = result.data.nome;
             document.getElementById('precoNovo').value = result.data.preco;
             document.getElementById('descricaoNova').value = result.data.descricao;
@@ -275,18 +273,21 @@ async function carregarProdutosCatalogo() {
                 card.className = 'col-md-6 mb-3';
 
                 card.innerHTML = `
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">${produto.nome}</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">R$ ${produto.preco}</h6>
-                            <p class="card-text">${produto.descricao}</p>
-                            <button class="btn btn-primary" onclick="adicionarAoCarrinho(${produto.id})">Adicionar ao Carrinho</button>
+                <div class="card mb-4 shadow-sm">
+                    <img src="/assets/images/${produto.imagem}" class="card-img-top" alt="${produto.nome}" style="object-fit: cover;">
+                    <div class="card-body bg-roxo-claro" style="border-radius: 8px;">
+                        <h5 class="card-title">${produto.nome}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">R$ ${produto.preco}</h6>
+                        <p class="card-text">${produto.descricao}</p>
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-primary bg-roxo-escuro me-2" style= "border: none;" onclick="adicionarAoCarrinho(${produto.id})">Adicionar ao Carrinho</button>
                             ${isFavorito ? 
-                                `<button class="btn btn-danger" onclick="desfavoritar(${usuario_id}, ${produto.id})">Desfavoritar</button>` : 
-                                `<button class="btn btn-secondary" onclick="favoritar(${usuario_id}, ${produto.id})">Favoritar</button>`}
+                                `<button class="btn btn-danger" style="max-width: 120px; max-height: 50px;" onclick="desfavoritar(${usuario_id}, ${produto.id})">Desfavoritar</button>` : 
+                                `<button class="btn btn-secondary" style="max-width: 120px; max-height: 50px;" onclick="favoritar(${usuario_id}, ${produto.id})">Favoritar</button>`}
                         </div>
                     </div>
-                `;
+                </div>
+            `;            
                 tabela.appendChild(card);
             });
         } else {
@@ -324,12 +325,13 @@ async function carregarProdutosCarrinho() {
                 card.className = 'col-md-6 mb-3';
 
                 card.innerHTML = `
-                    <div class="card">
-                        <div class="card-body">
+                    <div class="card mb-4">
+                        <div class="card-body bg-roxo-medio" style="border-radius: 8px;">
                             <h5 class="card-title">${produto.nome}</h5>
                             <h6 class="card-subtitle mb-2 text-muted">R$ ${produto.preco}</h6>
-                            <p class="card-text">${produto.total}</p>
-                            <button class="btn btn-danger" onclick="removerDoCarrinho(${produto.produto_id})">Remover</button>
+                            <p class="card-text">Quantidade: ${produto.quantidade}</p>
+                            <p class="card-text">Total: R$ ${produto.total}</p>
+                            <button class="btn bg-verde-medio" style="max-width: 120px;" onclick="removerDoCarrinho(${produto.produto_id})">Remover</button>
                         </div>
                     </div>
                 `;
