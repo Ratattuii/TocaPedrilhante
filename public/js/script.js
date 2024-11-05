@@ -9,19 +9,7 @@ function getIdFromURL() {
     return urlParams.get('id');
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    verificarAdm();
-});
 
-function verificarAdm() {
-    const isAdmin = localStorage.getItem('usuario_adm');
-
-    if (isAdmin === '1') {
-        document.getElementById('admin-link').style.display = 'block';
-    } else {
-        document.getElementById('admin-link').style.display = 'none';
-    }
-}
 
 function atualizarTotalCarrinho() {
     document.getElementById('total-produtos-carrinho').textContent = totalCarrinho;
