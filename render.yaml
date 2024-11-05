@@ -4,7 +4,7 @@ services:
     env: node  # Ambiente Node.js
     plan: free  # Utiliza o plano gratuito do Render
     buildCommand: "npm install"  # Comando para instalar dependências
-    startCommand: "node server.js"  # Comando para iniciar o servidor
+    startCommand: "npm start"  # Comando para iniciar o servidor
     autoDeploy: true  # Ativa o deploy contínuo
     envVars:
       - key: DATABASE_HOST
