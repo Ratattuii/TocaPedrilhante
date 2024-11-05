@@ -1,0 +1,19 @@
+services:
+  - type: web  # Define que este é um serviço web
+    name: toca-pedrilhante-backend  # Nome do serviço no Render
+    env: node  # Ambiente Node.js
+    plan: free  # Utiliza o plano gratuito do Render
+    buildCommand: "npm install"  # Comando para instalar dependências
+    startCommand: "node server.js"  # Comando para iniciar o servidor
+    autoDeploy: true  # Ativa o deploy contínuo
+    envVars:
+      - key: DATABASE_HOST
+        value: "127.0.0.1"  # Substitua pelo endereço do host MySQL no ambiente de produção
+      - key: DATABASE_USER
+        value: "tocapedrilhante"  # Substitua pelo usuário do banco de dados
+      - key: DATABASE_PASSWORD
+        value: "tocapedrilhante"  # Substitua pela senha do banco de dados
+      - key: DATABASE_NAME
+        value: "TocaPedrilhante"  # Substitua pelo nome do banco de dados
+      - key: NODE_ENV
+        value: "production"
