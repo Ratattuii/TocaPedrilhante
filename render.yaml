@@ -8,12 +8,12 @@ services:
     autoDeploy: true  # Ativa o deploy contínuo
     envVars:
       - key: DATABASE_HOST
-        value: "127.0.0.1"  # Substitua pelo endereço do host MySQL no ambiente de produção
+        value: "bxqqfmfsq9wwiddwznzj-mysql.services.clever-cloud.com"  # Substitua pelo endereço do host MySQL no ambiente de produção
       - key: DATABASE_USER
-        value: "tocapedrilhante"  # Substitua pelo usuário do banco de dados
+        value: "uwfgvvtrntb5tysj"  # Substitua pelo usuário do banco de dados
       - key: DATABASE_PASSWORD
-        value: "tocapedrilhante"  # Substitua pela senha do banco de dados
+        value: "DS9Bw9Hf6xrC6pB0eZKl"  # Substitua pela senha do banco de dados
       - key: DATABASE_NAME
-        value: "TocaPedrilhante"  # Substitua pelo nome do banco de dados
+        value: "bxqqfmfsq9wwiddwznzj"  # Substitua pelo nome do banco de dados
       - key: NODE_ENV
         value: "production"
