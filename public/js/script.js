@@ -47,10 +47,7 @@ async function cadastrarUsuario(event) {
 
         const result = await response.json();
         if (result.sucesso) {
-            alert(result.message);
             window.location.href = '../';
-        } else {
-            alert(result.message + ":" + result.erro);
         }
     } catch (error) {
         alert('Ocorreu um erro ao tentar realizar o cadastro.');
@@ -82,11 +79,7 @@ async function realizarLogin(event) {
             localStorage.setItem('usuario_email', result.user.email);
             localStorage.setItem('usuario_adm', result.user.adm);
 
-            alert(result.message);
-
             window.location.href = `./menu/index.html?id=${result.user.id}`;
-        } else {
-            alert(result.message);
         }
     } catch (error) {
         alert('Ocorreu um erro ao tentar realizar o login.' + error);
@@ -97,7 +90,6 @@ async function realizarLogin(event) {
 
 async function logout() {
     localStorage.clear();
-    alert('Você foi deslogado com sucesso.');
     window.location.href = '../';
 }
 
@@ -120,10 +112,7 @@ async function cadastrarProduto(event) {
 
         const result = await response.json();
         if (result.sucesso) {
-            alert(result.message);
             location.reload();
-        } else {
-            alert('Erro no cadastro: ' + result.message);
         }
     } catch (error) {
         alert('Ocorreu um erro ao tentar realizar o cadastro.');
@@ -165,8 +154,6 @@ async function buscarProdutos() {
 
                 tabela.appendChild(row);
             });
-        } else {
-            alert(result.message + ":" + result.erro);
         }
     } catch (error) {
         alert('Ocorreu um erro ao tentar listar produtos.');
@@ -218,7 +205,6 @@ async function editarProduto() {
 
         const result = await response.json();
         if (result.sucesso) {
-            alert('Produto atualizado com sucesso!');
             window.location.href = './index.html';
         } else {
             alert('Erro ao editar produto: ' + result.message);
@@ -240,10 +226,7 @@ async function removerProduto(id) {
 
             const result = await response.json();
             if (result.sucesso) {
-                alert(result.message);
                 location.reload();
-            } else {
-                alert(result.message + ":" + result.erro);
             }
         } catch (error) {
             alert('Ocorreu um erro ao tentar realizar o cadastro.');
@@ -302,8 +285,6 @@ async function carregarProdutosCatalogo() {
             `;            
                 tabela.appendChild(card);
             });
-        } else {
-            alert(result.message + ":" + result.erro);
         }
     } catch (error) {
         alert('Ocorreu um erro ao tentar listar produtos.');
@@ -355,8 +336,6 @@ async function carregarProdutosCarrinho() {
 
             // Atualiza o total exibido
             atualizarTotalCarrinho();
-        } else {
-            alert(result.message + ":" + result.erro);
         }
     } catch (error) {
         alert('Ocorreu um erro ao tentar listar produtos.');
@@ -379,11 +358,8 @@ async function adicionarAoCarrinho(produto_id) {
 
         const result = await response.json();
         if (result.sucesso) {
-            alert(result.message);
             atualizarTotalCarrinho();
             carregarProdutosCarrinho(usuario_id);
-        } else {
-            alert('Erro ao adicionar ao carrinho: ' + result.message);
         }
     } catch (erro) {
         alert('Ocorreu um erro ao tentar adicionar o produto ao carrinho.' + erro);
@@ -406,10 +382,7 @@ async function removerDoCarrinho(produto_id) {
 
         const result = await response.json();
         if (result.sucesso) {
-            alert(result.message);
             carregarProdutosCarrinho(usuario_id);
-        } else {
-            alert('Erro ao remover produto do carrinho: ' + result.message);
         }
     } catch (erro) {
         alert('Ocorreu um erro ao tentar remover o produto do carrinho.' + erro);
@@ -430,10 +403,7 @@ async function favoritar(usuario_id, produto_id) {
 
         const result = await response.json();
         if (result.message) {
-            alert(result.message);
             carregarProdutosCatalogo(usuario_id);
-        } else {
-            alert(result.erro);
         }
     } catch (error) {
         alert('Erro ao favoritar o produto.');
@@ -453,10 +423,7 @@ async function desfavoritar(usuario_id, produto_id) {
 
         const result = await response.json();
         if (result.message) {
-            alert(result.message);
-            carregarProdutosCatalogo(usuario_id); // Recarregar os produtos
-        } else {
-            alert(result.erro);
+            carregarProdutosCatalogo(usuario_id);
         }
     } catch (error) {
         alert('Erro ao desfavoritar o produto.');
@@ -480,7 +447,6 @@ async function finalizarCompra() {
         const result = await response.json();
 
         if (result.sucesso) {
-            alert(result.message);
             carregarProdutosCarrinho(usuario_id);
             window.location.href= '/public/compra-finalizada/index.html';
         } else {
