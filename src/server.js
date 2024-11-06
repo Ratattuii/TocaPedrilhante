@@ -19,7 +19,7 @@ app.get('/api/produtos', (req, res) => {
     const query = 'SELECT * FROM produtos';
     db.query(query, (err, results) => {
         if (err) {
-            res.json({sucesso: false, message: 'Erro ao listar produtos', erro: err });
+            res.status(400).json({sucesso: false, message: 'Erro ao listar produtos', erro: err });
         } else {
             res.json({sucesso: true, message: 'Produtos listados com sucesso', data:results});
         }
@@ -34,9 +34,9 @@ app.get('/api/produto/:id', (req, res) => {
     const query = 'SELECT nome, preco, descricao FROM produtos WHERE id = ?';
     db.query(query, [id], (err, results) => {
         if (err) {
-            res.json({ sucesso: false, message: 'Erro ao listar produto', erro: err });
+            res.status(400).json({ sucesso: false, message: 'Erro ao listar produto', erro: err });
         } else if (results.length === 0) {
-            res.json({ sucesso: false, message: 'Produto não encontrado' });
+            res.status(400).json({ sucesso: false, message: 'Produto não encontrado' });
         } else {
             res.json({ sucesso: true, message: 'Produto listado com sucesso', data: results[0] });
         }
@@ -113,6 +113,7 @@ app.post('/api/usuarios/login', (req, res) => {
     const { email, senha } = req.body;
     db.query('SELECT * FROM Usuarios WHERE email = ? AND senha = ?', [email, senha], (err, results) => {
         if (err) {
+            console.log(err);
             res.status(401).json({ sucesso: false, message: 'Erro ao realizar login', erro: err });
         } else {
             if (results.length > 0) {
