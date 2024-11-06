@@ -16,7 +16,7 @@ app.use(express.static('public'));
 
 // Rota para buscar todos os produtos
 app.get('/api/produtos', (req, res) => {
-    const query = 'SELECT * FROM produtos';
+    const query = 'SELECT * FROM Produtos';
     db.query(query, (err, results) => {
         if (err) {
             res.status(400).json({sucesso: false, message: 'Erro ao listar produtos', erro: err });
@@ -31,7 +31,7 @@ app.get('/api/produtos', (req, res) => {
 app.get('/api/produto/:id', (req, res) => {
     const { id } = req.params;
 
-    const query = 'SELECT nome, preco, descricao FROM produtos WHERE id = ?';
+    const query = 'SELECT nome, preco, descricao FROM Produtos WHERE id = ?';
     db.query(query, [id], (err, results) => {
         if (err) {
             res.status(400).json({ sucesso: false, message: 'Erro ao listar produto', erro: err });
@@ -52,7 +52,7 @@ app.post('/api/produto',  upload.single('imagem'), (req, res) => {
     // Pega o nome do arquivo da imagem
     const imagem = req.file ? req.file.filename : null;
 
-    const query = 'INSERT INTO produtos (nome, preco, descricao, imagem) VALUES (?, ?, ?, ?)';
+    const query = 'INSERT INTO Produtos (nome, preco, descricao, imagem) VALUES (?, ?, ?, ?)';
     db.query(query, [nome, preco, descricao, imagem], (err, results) => {
         if (err) {
             res.status(400).json({ sucesso: false, message: 'Erro ao adicionar produto', erro: err});
@@ -68,7 +68,7 @@ app.post('/api/produto',  upload.single('imagem'), (req, res) => {
 app.put('/api/produto/:id', (req, res) => {
     const { id } = req.params;
     const { nome, preco, descricao } = req.body;
-    const query = 'UPDATE produtos SET nome = ?, preco = ?, descricao = ? WHERE id = ?';
+    const query = 'UPDATE Produtos SET nome = ?, preco = ?, descricao = ? WHERE id = ?';
     db.query(query, [nome, preco, descricao, id], (err, results) => {
         if (err) {
             res.status(400).json({ sucesso: false, message: 'Erro ao editar produto', erro: err });
@@ -83,7 +83,7 @@ app.put('/api/produto/:id', (req, res) => {
 // Rota para remover um produto
 app.delete('/api/produto/:id', (req, res) => {
     const { id } = req.params;
-    const query = 'DELETE FROM produtos WHERE id = ?';
+    const query = 'DELETE FROM Produtos WHERE id = ?';
     db.query(query, [id], (err, results) => {
         if (err) {
             res.status(400).json({ sucesso: false, message: 'Erro ao remover o produto', erro: err });
