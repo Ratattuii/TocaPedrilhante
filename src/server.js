@@ -5,7 +5,7 @@ const db = require('./dbconfig')
 const upload = require('./multer');
 const multer = require('multer');
 const app = express();
-const port = 3000;
+const port = 8080;
 
 
 app.use(cors());
