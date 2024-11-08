@@ -9,8 +9,6 @@ function getIdFromURL() {
     return urlParams.get('id');
 }
 
-
-
 function atualizarTotalCarrinho() {
     document.getElementById('total-produtos-carrinho').textContent = totalCarrinho;
 }
