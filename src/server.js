@@ -195,6 +195,7 @@ app.delete('/api/carrinho/:usuario_id/:produto_id', (req, res) => {
 // Rota para obter os favoritos de um usuário
 app.get('/api/favoritos/:usuario_id', (req, res) => {
     const { usuario_id } = req.params;
+    console.log('ID do usuário:', usuario_id);
 
     const query = "SELECT produto_id FROM favoritos WHERE usuario_id = ?";
     db.query(query, [usuario_id], (err, results) => {

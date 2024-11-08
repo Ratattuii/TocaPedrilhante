@@ -256,6 +256,7 @@ async function carregarProdutosCatalogo() {
                 }
             });
             const favoritosResult = await favoritosResponse.json();
+            alert(favoritosResult); 
             const favoritos = favoritosResult.data;
 
             produtos.forEach(produto => {
