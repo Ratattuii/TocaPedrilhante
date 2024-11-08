@@ -234,7 +234,6 @@ async function removerProduto(id) {
 
 async function carregarProdutosCatalogo() {
     usuario_id = usuarioLogado()
-    alert(usuario_id);
 
     try {
         const response = await fetch(`${apiUrl}/produtos`, {
@@ -256,7 +255,8 @@ async function carregarProdutosCatalogo() {
                     'Content-Type': 'application/json'
                 }
             });
-            const favoritosResult = await favoritosResponse.json();
+            const favoritosResult = await favoritosResponse.json()
+            console.log(favoritosResult);
             const favoritos = favoritosResult.data;
 
             produtos.forEach(produto => {
