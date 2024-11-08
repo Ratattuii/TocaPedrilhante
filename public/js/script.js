@@ -13,6 +13,16 @@ function atualizarTotalCarrinho() {
     document.getElementById('total-produtos-carrinho').textContent = totalCarrinho;
 }
 
+function showAdmin(isAdmin) {
+    const adminLink = document.getElementById("admin-link");
+
+    if (isAdmin === 1) {
+        adminLink.style.display = "block";
+    } else {
+        adminLink.style.display = "none";
+    }
+}
+
 // ----------------------------------------------------------------------------
 
 async function cadastrarUsuario(event) {
